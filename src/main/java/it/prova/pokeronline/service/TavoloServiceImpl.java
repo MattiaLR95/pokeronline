@@ -3,11 +3,11 @@ package it.prova.pokeronline.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import it.prova.pokeronline.model.Tavolo;
 import it.prova.pokeronline.repository.tavolo.TavoloRepository;
+import it.prova.pokeronline.web.api.exception.TavoloNotFoundException;
 
 @Service
 public class TavoloServiceImpl implements TavoloService {
