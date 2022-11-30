@@ -1,4 +1,4 @@
-package it.prova.pokeronline.service.ruolo;
+package it.prova.pokeronline.service;
 
 import java.util.List;
 
