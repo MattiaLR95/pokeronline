@@ -1,13 +1,20 @@
 package it.prova.pokeronline;
 
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class PokeronlineApplication {
+public class PokeronlineApplication implements CommandLineRunner{
 
 	public static void main(String[] args) {
 		SpringApplication.run(PokeronlineApplication.class, args);
+	}
+
+	@Override
+	public void run(String... args) throws Exception {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
