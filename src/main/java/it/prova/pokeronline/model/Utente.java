@@ -40,6 +40,9 @@ public class Utente {
 	@Column(name = "cognome")
 	private String cognome;
 
+	@Column(name = "email")
+	private String email;
+
 	@Column(name = "dataRegistrazione")
 	private Date dataRegistrazione;
 
@@ -57,13 +60,6 @@ public class Utente {
 	@JoinTable(name = "utente_ruolo", joinColumns = @JoinColumn(name = "utente_id", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "ruolo_id", referencedColumnName = "ID"))
 	private Set<Ruolo> ruoli = new HashSet<>(0);
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "tavolo_id")
-	private Tavolo tavoloJoined;
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "utenteCreazione")
-	private Set<Tavolo> tavoliCreati = new HashSet<Tavolo>(0);
-
 	public Utente() {
 	}
 
@@ -80,18 +76,21 @@ public class Utente {
 		this.dataRegistrazione = dataRegistrazione;
 	}
 
-	public Utente(Long id, String username, String password, String nome, String cognome, Date dataRegistrazione,
-			Integer esperienzaAccumulata, Integer creditoAccumulato, StatoUtente stato) {
+	public Utente(Long id, String username, String password, String nome, String cognome, String email,
+			Date dataRegistrazione, Integer esperienzaAccumulata, Integer creditoAccumulato, StatoUtente stato,
+			Set<Ruolo> ruoli) {
 		super();
 		this.id = id;
 		this.username = username;
 		this.password = password;
 		this.nome = nome;
 		this.cognome = cognome;
+		this.email = email;
 		this.dataRegistrazione = dataRegistrazione;
 		this.esperienzaAccumulata = esperienzaAccumulata;
 		this.creditoAccumulato = creditoAccumulato;
 		this.stato = stato;
+		this.ruoli = ruoli;
 	}
 
 	public Long getId() {
@@ -142,6 +141,14 @@ public class Utente {
 		this.cognome = cognome;
 	}
 
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	public Date getDataRegistrazione() {
 		return dataRegistrazione;
 	}
@@ -188,22 +195,6 @@ public class Utente {
 
 	public boolean isDisabilitato() {
 		return this.stato != null && this.stato.equals(StatoUtente.DISABILITATO);
-	}
-
-	public Tavolo getTavoloJoined() {
-		return tavoloJoined;
-	}
-
-	public void setTavoloJoined(Tavolo tavoloJoined) {
-		this.tavoloJoined = tavoloJoined;
-	}
-
-	public Set<Tavolo> getTavoliCreati() {
-		return tavoliCreati;
-	}
-
-	public void setTavoliCreati(Set<Tavolo> tavoliCreati) {
-		this.tavoliCreati = tavoliCreati;
 	}
 
 }
