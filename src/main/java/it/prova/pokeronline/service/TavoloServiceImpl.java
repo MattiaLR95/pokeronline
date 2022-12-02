@@ -11,7 +11,10 @@ import it.prova.pokeronline.model.Tavolo;
 import it.prova.pokeronline.model.Utente;
 import it.prova.pokeronline.repository.tavolo.TavoloRepository;
 import it.prova.pokeronline.repository.utente.UtenteRepository;
+import it.prova.pokeronline.web.api.exception.InsufficientFundException;
+import it.prova.pokeronline.web.api.exception.NotEnoughExperienceException;
 import it.prova.pokeronline.web.api.exception.NotYourTavoloException;
+import it.prova.pokeronline.web.api.exception.PlayerBusyToAnotherTableException;
 import it.prova.pokeronline.web.api.exception.TavoloConGiocatoriException;
 import it.prova.pokeronline.web.api.exception.TavoloNotFoundException;
 import it.prova.pokeronline.web.api.exception.UtenteNotFoundException;
@@ -145,5 +148,102 @@ public class TavoloServiceImpl implements TavoloService {
 		return repository.findByExampleEager(example);
 
 	}
+	
+	@Override
+	public List<Tavolo> findAllTavoliPlayable(String username) {
+		Utente utenteInSessione = utenteRepository.findByUsername(username).orElse(null);
+		if (utenteInSessione == null)
+			throw new UtenteNotFoundException("Utente non trovato.");
+
+		return repository.findAllTavoliPlayable(utenteInSessione.getEsperienzaAccumulata());
+	}
+
+	@Override
+	@Transactional
+	public void play(Long id, String username) {
+		Tavolo tavoloReloaded = repository.findById(id).orElse(null);
+		if (tavoloReloaded == null)
+			throw new TavoloNotFoundException("Tavolo non trovato.");
+
+		Utente utenteInSessione = utenteRepository.findByUsername(username).orElse(null);
+		if (utenteInSessione == null)
+			throw new UtenteNotFoundException("Utente non trovato.");
+
+		if (utenteInSessione.getEsperienzaAccumulata() < tavoloReloaded.getEsperienzaMinima())
+			throw new NotEnoughExperienceException("Impossibile giocare al tavolo selezionato, serve piu'esperienza!");
+
+		if (utenteInSessione.getCreditoAccumulato() < tavoloReloaded.getCifraMinima())
+			throw new InsufficientFundException("Impossibile giocare al tavolo selezionato, credito insufficiente!");
+
+		List<Tavolo> tavoliDB = (List<Tavolo>) repository.findAll();
+
+		for (Tavolo tavoloItem : tavoliDB) {
+			for (Utente giocatoreItem : tavoloItem.getGiocatori()) {
+				if (giocatoreItem.getId().equals(utenteInSessione.getId()))
+					throw new PlayerBusyToAnotherTableException(
+							"Impossibile giocare perche' sei gia' impegnato presso un altro tavolo.");
+			}
+		}
+
+		double randomNumber = Math.random() * 1000;
+		int totDaAggiungereOSottrarre = (int) randomNumber;
+
+		Integer creditoAggiornato = utenteInSessione.getCreditoAccumulato() + totDaAggiungereOSottrarre;
+
+		if (creditoAggiornato < 0) {
+			utenteInSessione.setCreditoAccumulato(0);
+			utenteRepository.save(utenteInSessione);
+			throw new InsufficientFundException("Credito Esaurito.");
+		}
+
+		utenteInSessione.setCreditoAccumulato(creditoAggiornato);
+		utenteRepository.save(utenteInSessione);
+		tavoloReloaded.getGiocatori().add(utenteInSessione);
+		repository.save(tavoloReloaded);
+
+	}
+
+	@Override
+	@Transactional
+	public void leave(Long id, String username) {
+		Utente utenteInSessione = utenteRepository.findByUsername(username).orElse(null);
+		if (utenteInSessione == null)
+			throw new UtenteNotFoundException("Utente non trovato.");
+
+		Tavolo tavoloReloaded = repository.findById(id).orElse(null);
+		if (tavoloReloaded == null)
+			throw new TavoloNotFoundException("Tavolo non trovato.");
+
+		for (Utente item : tavoloReloaded.getGiocatori()) {
+			if (item.getId().equals(utenteInSessione.getId())) {
+
+				utenteInSessione.setEsperienzaAccumulata(utenteInSessione.getEsperienzaAccumulata() + 1);
+				utenteRepository.save(utenteInSessione);
+
+				tavoloReloaded.getGiocatori().remove(utenteInSessione);
+				repository.save(tavoloReloaded);
+			}
+
+		}
+
+	}
+
+	@Override
+	public Tavolo lastGame(String username) {
+		Utente utenteInSessione = utenteRepository.findByUsername(username).orElse(null);
+		if (utenteInSessione == null)
+			throw new UtenteNotFoundException("Utente non trovato.");
+
+		List<Tavolo> tavoliDB = (List<Tavolo>) repository.findAll();
+
+		for (Tavolo tavoloItem : tavoliDB) {
+			for (Utente giocatoreItem : tavoloItem.getGiocatori()) {
+				if (giocatoreItem.getId().equals(utenteInSessione.getId()))
+					return tavoloItem;
+			}
+		}
+		return new Tavolo();
+	}
+
 
 }

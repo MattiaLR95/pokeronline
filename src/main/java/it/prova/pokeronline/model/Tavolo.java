@@ -58,6 +58,10 @@ public class Tavolo {
 		this.utenteCreazione = utenteCreazione;
 	}
 
+	public Tavolo() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public Long getId() {
 		return id;
 	}

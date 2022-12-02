@@ -19,5 +19,13 @@ public interface TavoloService {
 	public List<Tavolo> findByExample(Tavolo example, String username);
 
 	public Tavolo caricaSingoloTavoloConUtenti(Long id, String username);
+
+	Tavolo lastGame(String username);
+
+	void leave(Long id, String username);
+
+	void play(Long id, String username);
+
+	List<Tavolo> findAllTavoliPlayable(String username);
 	
 }
