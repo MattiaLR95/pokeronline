@@ -6,18 +6,18 @@ import it.prova.pokeronline.model.Tavolo;
 
 public interface TavoloService {
 
-	public List<Tavolo> listAllTavoli();
+	public List<Tavolo> listAllTavoli(String username);
 
 	public Tavolo caricaSingoloTavolo(Long id);
 
-	public Tavolo aggiornaAdmin(Tavolo tavoloInstance);
+	public Tavolo aggiorna(Tavolo tavoloInstance, String username);
 
-	public Tavolo inserisciNuovo(Tavolo tavoloInstance);
+	public Tavolo inserisciNuovo(Tavolo tavoloInstance, String username);
 
-	public void rimuovi(Long idToRemove);
+	public void rimuovi(Long idToRemove, String username);
 	
-	public List<Tavolo> findByExample(Tavolo example);
+	public List<Tavolo> findByExample(Tavolo example, String username);
 
-	Tavolo caricaSingoloTavoloConUtenti(Long id, String username);
+	public Tavolo caricaSingoloTavoloConUtenti(Long id, String username);
 	
 }

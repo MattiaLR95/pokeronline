@@ -1,5 +1,6 @@
 package it.prova.pokeronline.dto;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -28,7 +29,7 @@ public class TavoloDTO {
 	@NotBlank(message = "{denominazione.notblank}")
 	private String denominazione;
 
-	private Date dataCreazione;
+	private LocalDate dataCreazione;
 
 	private Set<Utente> utenti = new HashSet<Utente>(0);
 
@@ -39,7 +40,7 @@ public class TavoloDTO {
 	}
 
 	public TavoloDTO(Long id, Integer esperienzaMinima, Integer cifraMinima, String denominazione,
-			Date dataCreazione, Set<Utente> utenti, UtenteDTO utenteCreazione) {
+			LocalDate dataCreazione, Set<Utente> utenti, UtenteDTO utenteCreazione) {
 		super();
 		this.id = id;
 		this.esperienzaMinima = esperienzaMinima;
@@ -51,13 +52,13 @@ public class TavoloDTO {
 	}
 
 	public TavoloDTO(Long id, Integer esperienzaMinima, Integer cifraMinima, String denominazione,
-			Date dataCreazione) {
+			LocalDate localDate) {
 		super();
 		this.id = id;
 		this.esperienzaMinima = esperienzaMinima;
 		this.cifraMinima = cifraMinima;
 		this.denominazione = denominazione;
-		this.dataCreazione = dataCreazione;
+		this.dataCreazione = localDate;
 	}
 
 	public Long getId() {
@@ -92,11 +93,11 @@ public class TavoloDTO {
 		this.denominazione = denominazione;
 	}
 
-	public Date getDataCreazione() {
+	public LocalDate getDataCreazione() {
 		return dataCreazione;
 	}
 
-	public void setDataCreazione(Date dataCreazione) {
+	public void setDataCreazione(LocalDate dataCreazione) {
 		this.dataCreazione = dataCreazione;
 	}
 

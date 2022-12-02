@@ -1,6 +1,6 @@
 package it.prova.pokeronline.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,7 +34,7 @@ public class Tavolo {
 	private String denominazione;
 
 	@Column(name = "dataCreazione")
-	private Date dataCreazione;
+	private LocalDate dataCreazione;
 
 	@OneToMany(fetch = FetchType.LAZY)
 	private Set<Utente> giocatori = new HashSet<Utente>(0);
@@ -43,11 +43,11 @@ public class Tavolo {
 	@JoinColumn(name = "utente_creazione", nullable = false)
 	private Utente utenteCreazione;
 
-	public Tavolo(Long id2, Integer esperienzaMinima2, Integer cifraMinima2, String denominazione2, Date dataCreazione2) {
+	public Tavolo(Long id2, Integer esperienzaMinima2, Integer cifraMinima2, String denominazione2, LocalDate dataCreazione2) {
 
 	}
 
-	public Tavolo(Long id, Integer esperienzaMinima, Integer cifraMinima, String denominazione, Date dataCreazione,
+	public Tavolo(Long id, Integer esperienzaMinima, Integer cifraMinima, String denominazione, LocalDate dataCreazione,
 			Utente utenteCreazione) {
 		super();
 		this.id = id;
@@ -90,12 +90,12 @@ public class Tavolo {
 		this.denominazione = denominazione;
 	}
 
-	public Date getDataCreazione() {
+	public LocalDate getDataCreazione() {
 		return dataCreazione;
 	}
 
-	public void setDataCreazione(Date dataCreazione) {
-		this.dataCreazione = dataCreazione;
+	public void setDataCreazione(LocalDate localDate) {
+		this.dataCreazione = localDate;
 	}
 
 	public Set<Utente> getGiocatori() {
