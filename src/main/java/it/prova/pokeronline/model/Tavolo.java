@@ -36,11 +36,11 @@ public class Tavolo {
 	@Column(name = "dataCreazione")
 	private Date dataCreazione;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tavoloJoined")
+	@OneToMany(fetch = FetchType.LAZY)
 	private Set<Utente> giocatori = new HashSet<Utente>(0);
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "utente_id", nullable = false)
+	@JoinColumn(name = "utente_creazione", nullable = false)
 	private Utente utenteCreazione;
 
 	public Tavolo() {

@@ -1,5 +1,6 @@
 package it.prova.pokeronline.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -18,6 +19,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "utente")
@@ -60,17 +63,10 @@ public class Utente {
 	@JoinTable(name = "utente_ruolo", joinColumns = @JoinColumn(name = "utente_id", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "ruolo_id", referencedColumnName = "ID"))
 	private Set<Ruolo> ruoli = new HashSet<>(0);
 
-	public Utente() {
-	}
-
-	public Utente(String username, String password) {
-		super();
-		this.username = username;
-		this.password = password;
+	public Utente(Long id2, String username2, String password2, String nome2, String cognome2, String email2, Integer esperienzaAccumulata2, Integer creditoAccumulato2, Date dateCreated, StatoUtente stato2) {
 	}
 
 	public Utente(String username, String password, String nome, String cognome, Date dataRegistrazione) {
-		this(username, password);
 		this.nome = nome;
 		this.cognome = cognome;
 		this.dataRegistrazione = dataRegistrazione;

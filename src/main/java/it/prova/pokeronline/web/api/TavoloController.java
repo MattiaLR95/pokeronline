@@ -1,5 +1,8 @@
 package it.prova.pokeronline.web.api;
 
-public class TavoloController {
+import org.springframework.stereotype.Controller;
 
+@Controller
+public class TavoloController {
+	
 }

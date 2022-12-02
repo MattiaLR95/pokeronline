@@ -10,11 +10,12 @@ public interface TavoloService {
 
 	public Tavolo caricaSingoloTavolo(Long id);
 
-	public Tavolo aggiorna(Tavolo tavoloInstance);
+	public Tavolo aggiornaAdmin(Tavolo tavoloInstance);
 
 	public Tavolo inserisciNuovo(Tavolo tavoloInstance);
 
 	public void rimuovi(Long idToRemove);
 	
 	public List<Tavolo> findByExample(Tavolo example);
+	
 }
