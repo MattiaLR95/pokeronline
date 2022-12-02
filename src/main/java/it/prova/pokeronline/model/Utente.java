@@ -1,5 +1,6 @@
 package it.prova.pokeronline.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -15,6 +16,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "utente")
@@ -41,7 +44,7 @@ public class Utente {
 	private String email;
 
 	@Column(name = "dataRegistrazione")
-	private Date dataRegistrazione;
+	private LocalDate dataRegistrazione;
 
 	@Column(name = "esperienzaAccumulata")
 	private Integer esperienzaAccumulata;
@@ -58,17 +61,17 @@ public class Utente {
 	private Set<Ruolo> ruoli = new HashSet<>(0);
 
 	public Utente(Long id2, String username2, String password2, String nome2, String cognome2, String email2,
-			Integer esperienzaAccumulata2, Integer creditoAccumulato2, Date dateCreated, StatoUtente stato2) {
+			Integer esperienzaAccumulata2, Integer creditoAccumulato2, LocalDate dataRegistrazione, StatoUtente stato2) {
 	}
 
-	public Utente(String username, String password, String nome, String cognome, Date dataRegistrazione) {
+	public Utente(String username, String password, String nome, String cognome, LocalDate dataRegistrazione) {
 		this.nome = nome;
 		this.cognome = cognome;
 		this.dataRegistrazione = dataRegistrazione;
 	}
 
 	public Utente(Long id, String username, String password, String nome, String cognome, String email,
-			Date dataRegistrazione, Integer esperienzaAccumulata, Integer creditoAccumulato, StatoUtente stato,
+			LocalDate dataRegistrazione, Integer esperienzaAccumulata, Integer creditoAccumulato, StatoUtente stato,
 			Set<Ruolo> ruoli) {
 		super();
 		this.id = id;
@@ -82,6 +85,18 @@ public class Utente {
 		this.creditoAccumulato = creditoAccumulato;
 		this.stato = stato;
 		this.ruoli = ruoli;
+	}
+
+	public Utente(Long id,
+			@NotBlank(message = "{username.notblank}") @Size(min = 3, max = 15, message = "Il valore inserito '${validatedValue}' deve essere lungo tra {min} e {max} caratteri") String username,
+			@NotBlank(message = "{nome.notblank}") String nome,
+			@NotBlank(message = "{cognome.notblank}") String cognome,
+			@NotBlank(message = "{email.notblank}") String email) {
+		this.id = id;
+		this.username = username;
+		this.nome = nome;
+		this.cognome = cognome;
+		this.email = email;
 	}
 
 	public Long getId() {
@@ -140,11 +155,11 @@ public class Utente {
 		this.email = email;
 	}
 
-	public Date getDataRegistrazione() {
+	public LocalDate getDataRegistrazione() {
 		return dataRegistrazione;
 	}
 
-	public void setDataRegistrazione(Date dataRegistrazione) {
+	public void setDataRegistrazione(LocalDate dataRegistrazione) {
 		this.dataRegistrazione = dataRegistrazione;
 	}
 

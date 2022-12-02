@@ -1,5 +1,6 @@
 package it.prova.pokeronline.dto;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -35,7 +36,7 @@ public class UtenteDTO {
 	@NotBlank(message = "{email.notblank}")
 	private String email;
 
-	private Date dateCreated;
+	private LocalDate dateCreated;
 
 	private Integer esperienzaAccumulata;
 
@@ -57,7 +58,7 @@ public class UtenteDTO {
 		this.stato = stato;
 	}
 
-	public UtenteDTO(Long id, String username, String nome, String cognome, String email, Date dateCreated,
+	public UtenteDTO(Long id, String username, String nome, String cognome, String email, LocalDate dateCreated,
 			Integer esperienzaAccumulata, Integer creditoAccumulato, StatoUtente stato) {
 		super();
 		this.id = id;
@@ -111,11 +112,11 @@ public class UtenteDTO {
 		this.cognome = cognome;
 	}
 
-	public Date getDateCreated() {
+	public LocalDate getDateCreated() {
 		return dateCreated;
 	}
 
-	public void setDateCreated(Date dateCreated) {
+	public void setDateCreated(LocalDate dateCreated) {
 		this.dateCreated = dateCreated;
 	}
 

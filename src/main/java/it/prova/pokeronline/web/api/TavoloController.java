@@ -75,4 +75,10 @@ public class TavoloController {
 		Tavolo tavoloAggiornato = tavoloService.aggiorna(tavoloInput.buildTavoloModel(), principal.getName());
 		return TavoloDTO.buildTavoloDTOFromModel(tavoloAggiornato, false);
 	}
+	
+	@PostMapping("/search")
+	public List<TavoloDTO> search(@RequestBody TavoloDTO example, Principal principal) {
+		return TavoloDTO.createTavoloDTOFromModelList(
+				tavoloService.findByExample(example.buildTavoloModel(), principal.getName()), false);
+	}
 }
