@@ -43,7 +43,7 @@ public class Tavolo {
 	@JoinColumn(name = "utente_creazione", nullable = false)
 	private Utente utenteCreazione;
 
-	public Tavolo() {
+	public Tavolo(Long id2, Integer esperienzaMinima2, Integer cifraMinima2, String denominazione2, Date dataCreazione2) {
 
 	}
 
