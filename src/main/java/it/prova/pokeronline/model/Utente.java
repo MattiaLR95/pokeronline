@@ -57,7 +57,8 @@ public class Utente {
 	@JoinTable(name = "utente_ruolo", joinColumns = @JoinColumn(name = "utente_id", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "ruolo_id", referencedColumnName = "ID"))
 	private Set<Ruolo> ruoli = new HashSet<>(0);
 
-	public Utente(Long id2, String username2, String password2, String nome2, String cognome2, String email2, Integer esperienzaAccumulata2, Integer creditoAccumulato2, Date dateCreated, StatoUtente stato2) {
+	public Utente(Long id2, String username2, String password2, String nome2, String cognome2, String email2,
+			Integer esperienzaAccumulata2, Integer creditoAccumulato2, Date dateCreated, StatoUtente stato2) {
 	}
 
 	public Utente(String username, String password, String nome, String cognome, Date dataRegistrazione) {
@@ -174,6 +175,14 @@ public class Utente {
 	public boolean isAdmin() {
 		for (Ruolo ruoloItem : ruoli) {
 			if (ruoloItem.getCodice().equals(Ruolo.ROLE_ADMIN))
+				return true;
+		}
+		return false;
+	}
+
+	public boolean isSpecialPlayer() {
+		for (Ruolo ruoloItem : ruoli) {
+			if (ruoloItem.getCodice().equals(Ruolo.ROLE_SPECIAL_PLAYER))
 				return true;
 		}
 		return false;

@@ -7,10 +7,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import it.prova.pokeronline.model.Tavolo;
+import it.prova.pokeronline.model.Utente;
 import it.prova.pokeronline.repository.tavolo.TavoloRepository;
+import it.prova.pokeronline.repository.utente.UtenteRepository;
 import it.prova.pokeronline.web.api.exception.IdNotNullForInsertException;
 import it.prova.pokeronline.web.api.exception.TavoloConGiocatoriException;
 import it.prova.pokeronline.web.api.exception.TavoloNotFoundException;
+import it.prova.pokeronline.web.api.exception.UtenteNotFoundException;
 
 @Service
 @Transactional(readOnly = true)
@@ -18,6 +21,9 @@ public class TavoloServiceImpl implements TavoloService {
 
 	@Autowired
 	private TavoloRepository tavoloRepository;
+	
+	@Autowired
+	private UtenteRepository utenteRepository;
 
 	@Override
 	public List<Tavolo> listAllTavoli() {
@@ -51,9 +57,10 @@ public class TavoloServiceImpl implements TavoloService {
 	public void rimuovi(Long idToRemove) throws TavoloNotFoundException {
 		Tavolo tavoloDaEliminare = tavoloRepository.findById(idToRemove).orElseThrow(
 				() -> new TavoloNotFoundException("Tavolo not found! Impossibile completare l'operazione"));
-		
-		if(!tavoloDaEliminare.getGiocatori().isEmpty())
-			throw new TavoloConGiocatoriException ("Giocatori ancora presenti nel tavolo! Impossibile completare l'operazione");
+
+		if (!tavoloDaEliminare.getGiocatori().isEmpty())
+			throw new TavoloConGiocatoriException(
+					"Giocatori ancora presenti nel tavolo! Impossibile completare l'operazione");
 
 		tavoloRepository.delete(tavoloDaEliminare);
 	}
@@ -61,6 +68,21 @@ public class TavoloServiceImpl implements TavoloService {
 	@Override
 	public List<Tavolo> findByExample(Tavolo example) {
 		return (List<Tavolo>) tavoloRepository.findByExample(example);
+	}
+
+	@Override
+	public Tavolo caricaSingoloTavoloConUtenti(Long id, String username) {
+		Utente utenteInSessione = utenteRepository.findByUsername(username).orElse(null);
+		if (utenteInSessione == null)
+			throw new UtenteNotFoundException("Utente non trovato.");
+
+		if (utenteInSessione.isAdmin())
+			return tavoloRepository.findSingleTavoloEagerAdmin(id);
+
+		if (utenteInSessione.isSpecialPlayer())
+			return tavoloRepository.findSingleTavoloEagerSpecialPlayer(utenteInSessione.getId(), id);
+
+		return null;
 	}
 
 }

@@ -52,4 +52,43 @@ public class CustomTavoloRepositoryImpl implements CustomTavoloRepository {
 		return typedQuery.getResultList();
 	}
 
+	@Override
+	public List<Tavolo> findByExampleEager(Tavolo example) {
+		Map<String, Object> paramaterMap = new HashMap<String, Object>();
+		List<String> whereClauses = new ArrayList<String>();
+
+		StringBuilder queryBuilder = new StringBuilder(
+				"select distinct t from Tavolo t join fetch t.utenteCreazione u where t.id = t.id ");
+
+		if (StringUtils.isNotEmpty(example.getDenominazione())) {
+			whereClauses.add(" t.denominazione like :denominazione ");
+			paramaterMap.put("denominazione", "%" + example.getDenominazione() + "%");
+		}
+		if (example.getDataCreazione() != null) {
+			whereClauses.add(" t.dataCreazione >= :dataCreazione ");
+			paramaterMap.put("dataCreazione", example.getDataCreazione());
+		}
+		if (example.getCifraMinima() != null) {
+			whereClauses.add(" t.cifraMinima >= :cifraMinima ");
+			paramaterMap.put("cifraMinima", example.getCifraMinima());
+		}
+		if (example.getEsperienzaMinima() != null) {
+			whereClauses.add(" t.esperienzaMinima >= :esperienzaMinima ");
+			paramaterMap.put("esperienzaMinima", example.getEsperienzaMinima());
+		}
+		if (example.getUtenteCreazione() != null && example.getUtenteCreazione().getId() != null) {
+			whereClauses.add(" u.id = :idUtente ");
+			paramaterMap.put("idUtente", example.getUtenteCreazione().getId());
+		}
+
+		queryBuilder.append(!whereClauses.isEmpty() ? " and " : "");
+		queryBuilder.append(StringUtils.join(whereClauses, " and "));
+		TypedQuery<Tavolo> typedQuery = entityManager.createQuery(queryBuilder.toString(), Tavolo.class);
+
+		for (String key : paramaterMap.keySet()) {
+			typedQuery.setParameter(key, paramaterMap.get(key));
+		}
+		return typedQuery.getResultList();
+	}
+
 }

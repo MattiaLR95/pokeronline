@@ -9,13 +9,15 @@ import it.prova.pokeronline.model.Tavolo;
 
 public interface TavoloRepository extends CrudRepository<Tavolo, Long>, CustomTavoloRepository {
 
-	@Query("from Tavolo t join fetch t.utenteCreazione left join fetch t.giocatori where t.id = ?1")
-	Tavolo findSingleTavoloEager(Long id);
+	@Query("select t from Tavolo t join fetch t.utenteCreazione u where u.id = ?1")
+	List<Tavolo> findAllTavoloEager(Long id);
 
-	@Query("from Tavolo t join fetch t.utenteCreazione left join fetch t.giocatori")
-	List<Tavolo> findAllTavoloEager();
+	@Query("select t from Tavolo t left join fetch t.utenti us join fetch t.utenteCreazione u where u.id = ?1 and t.id = ?2")
+	Tavolo findSingleTavoloEagerSpecialPlayer(Long idUtente, Long idTavolo);
 
-	List<Tavolo> findByEsperienzaMinimaLessThan(Integer esperienzaAccumulata);
+	@Query("select t from Tavolo t left join fetch t.utenti us where t.id = ?1")
+	Tavolo findSingleTavoloEagerAdmin(Long idTavolo);
 
-	Tavolo findByGiocatoriId(Long id);
+	@Query("from Tavolo t where t.esperienzaMinima <= ?1")
+	List<Tavolo> findAllTavoliPlayable(Integer esperienzaAccumulata);
 }

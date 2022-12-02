@@ -79,5 +79,16 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 		
 		return new ResponseEntity<>(body, HttpStatus.UNPROCESSABLE_ENTITY);
 	}
+	
+	@ExceptionHandler(UtenteNotFoundException.class)
+	public ResponseEntity<Object> handleUtenteNotFoundException(UtenteNotFoundException ex, WebRequest request) {
+		
+		Map<String, Object> body = new LinkedHashMap<>();
+		body.put("timestamp", LocalDateTime.now());
+		body.put("message", ex.getMessage());
+		body.put("status", HttpStatus.BAD_REQUEST);
+		
+		return new ResponseEntity<>(body, HttpStatus.UNPROCESSABLE_ENTITY);
+	}
 
 }

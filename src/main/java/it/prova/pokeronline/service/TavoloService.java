@@ -17,5 +17,7 @@ public interface TavoloService {
 	public void rimuovi(Long idToRemove);
 	
 	public List<Tavolo> findByExample(Tavolo example);
+
+	Tavolo caricaSingoloTavoloConUtenti(Long id, String username);
 	
 }
